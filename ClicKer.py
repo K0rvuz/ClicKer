@@ -12,22 +12,22 @@ from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtGui import QIcon
 
 
-# ================== RESOURCE PATH (Nuitka / EXE SAFE) ==================
+# Path para o nuikta
 
 def resource_path(relative_path):
     base_path = getattr(sys, "_MEIPASS", os.path.abspath("."))
     return os.path.join(base_path, relative_path)
 
 
-# ================== CONFIGURAÇÕES GLOBAIS ==================
+# config global
 
 PASTA_IMAGENS = resource_path("imagens")
 os.makedirs(PASTA_IMAGENS, exist_ok=True)
 
-pa.PAUSE = 0.8  # menor = mais rápido
+pa.PAUSE = 0.2  #tempo entre as ações do pyautogui
 
 
-# ================== TEMA DARK ==================
+# darkmode
 
 DARK_STYLE = """
 QWidget {
@@ -65,7 +65,7 @@ QLabel#StatusLabel {
 """
 
 
-# ================== THREAD DE AUTOMAÇÃO ==================
+# Automação base
 
 class AutomationWorker(QThread):
     imagem_encontrada = Signal(str)
@@ -92,7 +92,7 @@ class AutomationWorker(QThread):
         self.running = False
 
 
-# ================== DRAG & DROP ==================
+# configuração de arrasta e solta
 
 class DropArea(QLabel):
     imagem_solte = Signal(str)
@@ -121,13 +121,13 @@ class DropArea(QLabel):
                 self.imagem_solte.emit(caminho)
 
 
-# ================== JANELA PRINCIPAL ==================
+# interface principal
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # ÍCONE DA JANELA (runtime + taskbar)
+        # Icone
         self.setWindowIcon(QIcon(resource_path("assets/clicker.ico")))
 
         self.setWindowTitle("ClicKer")
@@ -149,7 +149,7 @@ class MainWindow(QMainWindow):
         self.btn_start = QPushButton("Iniciar")
         self.btn_stop = QPushButton("Parar")
 
-        # Layout (INALTERADO)
+        # Layout 
         layout = QVBoxLayout()
         layout.addWidget(self.status)
         layout.addWidget(self.drop_area)
@@ -175,10 +175,10 @@ class MainWindow(QMainWindow):
         self.btn_stop.clicked.connect(self.parar)
         self.drop_area.imagem_solte.connect(self.adicionar_por_drop)
 
-        # Carregar imagens existentes
+        # Carregar imagens existentes (banco de dados pra imagem, ficará em uma pasta)
         self.carregar_imagens()
 
-    # ================== IMAGENS ==================
+    # imgs
 
     def copiar_para_pasta(self, origem):
         nome = os.path.basename(origem)
@@ -233,7 +233,7 @@ class MainWindow(QMainWindow):
                 pass
             self.atualizar_lista()
 
-    # ================== AUTOMAÇÃO ==================
+    # Automação
 
     def iniciar(self):
         if not self.imagens:
@@ -262,7 +262,7 @@ class MainWindow(QMainWindow):
         event.accept()
 
 
-# ================== MAIN ==================
+# Principal
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -272,3 +272,4 @@ if __name__ == "__main__":
     window.show()
 
     sys.exit(app.exec())
+
