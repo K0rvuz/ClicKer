@@ -76,6 +76,7 @@ O projeto foi desenvolvido em **Python + PySide6**, com foco em:
 
 ```text
 ClicKer/
+├── Installer/ClicKerInstaller.exe
 ├── ClicKer.py
 ├── imagens/
 ├── assets/
